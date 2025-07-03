@@ -175,10 +175,3 @@ Let’s improve this Recipe Book together 💖
 
 This project is licensed under the **MIT License**.
 See `LICENSE.md` for full details.
-
-```
-
----
-
-Would you like a 🇫🇷 French version too? Or want me to include badges, screenshots, or an advanced Prompt Engineering section with examples?
-```
