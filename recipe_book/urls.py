@@ -5,8 +5,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('recipes/', include('recipes.urls')), # Include your recipes app URLs
-    path('', include('recipes.urls')), # Optional: Make recipes the default homepage
+    path('recipes/', include('recipes.urls')), # Include your recipes app URLs    
 ]
 
 if settings.DEBUG:

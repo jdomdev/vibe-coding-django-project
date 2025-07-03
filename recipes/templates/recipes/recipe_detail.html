@@ -23,11 +23,7 @@
                         <h3>Ingredients:</h3>
                         <div class="card-text ingredients-list">
                             {# Assuming ingredients are newline-separated, split and display as list items #}
-                            <ul>
-                            {% for ingredient_line in recipe.ingredients|splitlines %} {# Custom filter 'splitlines' might be needed if not using markdown #}
-                                <li>{{ ingredient_line }}</li>
-                            {% endfor %}
-                            </ul>
+                            <p>{{ recipe.ingredients|linebreaksbr }}</p>
                             {# If you expect markdown, use a markdown filter here like: {{ recipe.ingredients|markdown }} #}
                         </div>
 
@@ -36,11 +32,7 @@
                         <h3>Instructions:</h3>
                         <div class="card-text steps-list">
                             {# Assuming steps are newline-separated, split and display as ordered list items #}
-                            <ol>
-                            {% for step_line in recipe.steps|splitlines %} {# Custom filter 'splitlines' might be needed if not using markdown #}
-                                <li>{{ step_line }}</li>
-                            {% endfor %}
-                            </ol>
+                            <p>{{ recipe.steps|linebreaksbr }}</p>
                             {# If you expect markdown, use a markdown filter here like: {{ recipe.steps|markdown }} #}
                         </div>
 

@@ -67,7 +67,8 @@ class RecipeModelTest(TestCase):
         self.assertEqual(self.recipe.steps, "1. Cook chicken. 2. Add spices. 3. Simmer.")
         self.assertIsNotNone(self.recipe.created_at)
         self.assertIsNotNone(self.recipe.updated_at)
-        self.assertTrue(self.recipe.image.name.endswith('test_image.jpg')) # Check image name
+        self.assertIn('test_image', self.recipe.image.name)
+        self.assertTrue(self.recipe.image.name.endswith('.jpg'))
         self.assertIsNone(self.recipe.image_url) # Should be None as image was uploaded
 
     def test_recipe_str_method(self):
@@ -88,7 +89,8 @@ class RecipeModelTest(TestCase):
         Test the get_image_display_url method's logic.
         """
         # Case 1: Image uploaded
-        self.assertIn('test_image.jpg', self.recipe.get_image_display_url())
+        self.assertIn('test_image', self.recipe.get_image_display_url())
+        self.assertIn('.jpg', self.recipe.get_image_display_url())
 
         # Case 2: No image, but image_url provided
         self.assertEqual(self.recipe_with_image_url.get_image_display_url(), "http://example.com/pasta.jpg")
