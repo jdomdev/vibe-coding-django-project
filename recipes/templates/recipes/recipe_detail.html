@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ recipe.title }}{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card mb-4">
+                    {% if recipe.image or recipe.image_url %}
+                        <img src="{{ recipe.get_image_display_url }}" class="card-img-top" alt="{{ recipe.title }}" style="max-height: 400px; object-fit: cover;">
+                    {% else %}
+                        <img src="https://via.placeholder.com/400x300?text=No+Image" class="card-img-top" alt="No image available" style="max-height: 400px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h1 class="card-title">{{ recipe.title }}</h1>
+                        <p class="text-muted small">
+                            Added: {{ recipe.created_at|date:"F d, Y" }} | Last Updated: {{ recipe.updated_at|date:"F d, Y" }}
+                        </p>
+
+                        <hr>
+
+                        <h3>Ingredients:</h3>
+                        <div class="card-text ingredients-list">
+                            {# Assuming ingredients are newline-separated, split and display as list items #}
+                            <ul>
+                            {% for ingredient_line in recipe.ingredients|splitlines %} {# Custom filter 'splitlines' might be needed if not using markdown #}
+                                <li>{{ ingredient_line }}</li>
+                            {% endfor %}
+                            </ul>
+                            {# If you expect markdown, use a markdown filter here like: {{ recipe.ingredients|markdown }} #}
+                        </div>
+
+                        <hr>
+
+                        <h3>Instructions:</h3>
+                        <div class="card-text steps-list">
+                            {# Assuming steps are newline-separated, split and display as ordered list items #}
+                            <ol>
+                            {% for step_line in recipe.steps|splitlines %} {# Custom filter 'splitlines' might be needed if not using markdown #}
+                                <li>{{ step_line }}</li>
+                            {% endfor %}
+                            </ol>
+                            {# If you expect markdown, use a markdown filter here like: {{ recipe.steps|markdown }} #}
+                        </div>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'recipes:recipe_list' %}" class="btn btn-secondary">Back to List</a>
+                            <div>
+                                <a href="{% url 'recipes:recipe_update' pk=recipe.pk %}" class="btn btn-warning">Edit Recipe</a>
+                                <a href="{% url 'recipes:recipe_delete' pk=recipe.pk %}" class="btn btn-danger">Delete Recipe</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm Delete{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card border-danger">
+                    <div class="card-header bg-danger text-white">
+                        <h2 class="mb-0">Confirm Deletion</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Are you sure you want to delete the recipe "<strong>{{ recipe.title }}</strong>"?</p>
+                        <p class="card-text text-danger">This action cannot be undone.</p>
+
+                        <form method="post">
+                            {% csrf_token %} {# Always include this for security #}
+                            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                            <a href="{{ recipe.get_absolute_url }}" class="btn btn-secondary">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
