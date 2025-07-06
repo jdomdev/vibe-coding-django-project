@@ -39,7 +39,22 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Our apps
     'recipes',
+    # Django REST Framework
+    'rest_framework',
 ]
+
+# Optional: DRF default settings (can be customized)
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny', # Allows unauthenticated access for now
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer', # For the browsable API
+    ],
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': 10
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
