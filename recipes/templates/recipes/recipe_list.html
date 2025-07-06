@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {# Assuming you'll have a base template for overall layout #}
+{% extends 'base.html' %}
 
 {% block title %}All Recipes{% endblock %}
 
@@ -6,28 +6,38 @@
     <div class="container mt-4">
         <h1 class="mb-4">Our Delicious Recipes</h1>
 
-        <div class="mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
             <a href="{% url 'recipes:recipe_create' %}" class="btn btn-primary">Add New Recipe</a>
+
+            {# Search Form #}
+            <form class="d-flex" method="GET" action="{% url 'recipes:recipe_list' %}">
+                <input class="form-control me-2" type="search" placeholder="Search by title, ingredient, or step" aria-label="Search" name="q" value="{{ search_query }}">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+                {% if search_query %}
+                    <a href="{% url 'recipes:recipe_list' %}" class="btn btn-outline-secondary ms-2">Clear</a>
+                {% endif %}
+            </form>
         </div>
 
-        {% if recipes %} {# 'recipes' is the context_object_name from RecipeListView #}
+        {% if recipes %}
             <div class="row">
                 {% for recipe in recipes %}
                     <div class="col-md-4 mb-4">
                         <div class="card h-100">
                             {% if recipe.image or recipe.image_url %}
-                                <img src="{{ recipe.get_image_display_url }}" class="card-img-top" alt="{{ recipe.title }}" style="height: 200px; object-fit: cover;">
+                                <img src="{{ recipe.get_image_display_url }}" class="card-img-top" alt="{{ recipe.title }}" style="height: 200px; object-fit: cover; border-radius: 0.5rem 0.5rem 0 0;">
                             {% else %}
-                                <img src="https://via.placeholder.com/200x200?text=No+Image" class="card-img-top" alt="No image available" style="height: 200px; object-fit: cover;">
+                                <img src="https://placehold.co/200x200/cccccc/333333?text=No+Image" class="card-img-top" alt="No image available" style="height: 200px; object-fit: cover; border-radius: 0.5rem 0.5rem 0 0;">
                             {% endif %}
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">{{ recipe.title }}</h5>
-                                {# Displaying first few words of ingredients as a "short description" #}
                                 <p class="card-text text-muted">{{ recipe.ingredients|truncatewords:20 }}</p>
-                                <div class="mt-auto"> {# Push buttons to the bottom #}
-                                    <a href="{{ recipe.get_absolute_url }}" class="btn btn-sm btn-info">View Details</a>
-                                    <a href="{% url 'recipes:recipe_update' pk=recipe.pk %}" class="btn btn-sm btn-warning">Edit</a>
-                                    <a href="{% url 'recipes:recipe_delete' pk=recipe.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                                <div class="mt-auto d-flex justify-content-between">
+                                    <a href="{{ recipe.get_absolute_url }}" class="btn btn-sm btn-info rounded-pill">View Details</a>
+                                    <div>
+                                        <a href="{% url 'recipes:recipe_update' pk=recipe.pk %}" class="btn btn-sm btn-warning rounded-pill">Edit</a>
+                                        <a href="{% url 'recipes:recipe_delete' pk=recipe.pk %}" class="btn btn-sm btn-danger rounded-pill">Delete</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -38,20 +48,26 @@
             {# Optional: Basic Pagination Links #}
             {% if is_paginated %}
                 <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
+                    <ul class="pagination justify-content-center mt-4">
                         {% if page_obj.has_previous %}
-                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}">Previous</a></li>
                         {% endif %}
                         <li class="page-item active"><span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
                         {% if page_obj.has_next %}
-                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}">Next</a></li>
                         {% endif %}
                     </ul>
                 </nav>
             {% endif %}
 
         {% else %}
-            <p class="alert alert-info">No recipes found. Start by adding one!</p>
+            <p class="alert alert-info">
+                {% if search_query %}
+                    No recipes found matching "{{ search_query }}".
+                {% else %}
+                    No recipes found. Start by adding one!
+                {% endif %}
+            </p>
         {% endif %}
     </div>
 {% endblock %}
